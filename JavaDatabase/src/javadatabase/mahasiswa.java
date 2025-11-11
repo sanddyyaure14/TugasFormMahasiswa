@@ -5,6 +5,9 @@
  */
 package javadatabase;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
@@ -81,4 +84,42 @@ public class mahasiswa {
             e.printStackTrace();
         }
   }
+  
+  public static void importFromCSV(File file) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            int lineNo = 0;
+            int inserted = 0;
+
+            while ((line = br.readLine()) != null) {
+                lineNo++;
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                // skip header
+                if (lineNo == 1 && line.toLowerCase().contains("nama")) continue;
+
+                String[] data = line.split(",");
+                if (data.length < 2) {
+                    System.out.println("Baris " + lineNo + " tidak valid: " + line);
+                    continue;
+                }
+
+                String nama = data[0].trim();
+                String nim = data[1].trim();
+
+                mahasiswa m = new mahasiswa(nama, nim);
+                m.insert();
+                inserted++;
+            }
+
+            JOptionPane.showMessageDialog(null, 
+                "Upload CSV selesai! Data ditambahkan: " + inserted + " baris.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Gagal membaca file CSV: " + e.getMessage());
+        }
+    }
 }
+

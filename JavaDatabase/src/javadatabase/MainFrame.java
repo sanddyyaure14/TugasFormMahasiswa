@@ -8,6 +8,11 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.*;
 import javax.swing.*;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 /**
  *
@@ -48,6 +53,7 @@ public class MainFrame extends javax.swing.JFrame {
         tblMahasiswa = new javax.swing.JTable();
         btnHapus = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
+        btnCsv = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,6 +100,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        btnCsv.setText("Uploud CSV");
+        btnCsv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCsvActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,6 +115,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCsv)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -136,7 +151,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHapus)
                     .addComponent(btnEdit)
-                    .addComponent(btnSubmit))
+                    .addComponent(btnSubmit)
+                    .addComponent(btnCsv))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(142, Short.MAX_VALUE))
@@ -195,6 +211,27 @@ public class MainFrame extends javax.swing.JFrame {
     txtNama.setText(nama);
     txtNim.setText(nim);
     }//GEN-LAST:event_tblMahasiswaMouseClicked
+
+    private void btnCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCsvActionPerformed
+        // TODO add your handling code here:                                
+    JFileChooser chooser = new JFileChooser();
+    int result = chooser.showOpenDialog(this);
+    if (result != JFileChooser.APPROVE_OPTION) {
+        return;
+    }
+
+    File file = chooser.getSelectedFile();
+    if (file == null || !file.exists()) {
+        JOptionPane.showMessageDialog(this, "File tidak ditemukan!");
+        return;
+    }
+
+    mahasiswa.importFromCSV(file);
+  
+    loadData();
+
+
+    }//GEN-LAST:event_btnCsvActionPerformed
  
     private void loadData(){
         modelMahasiswa.setRowCount(0);
@@ -250,6 +287,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCsv;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSubmit;
