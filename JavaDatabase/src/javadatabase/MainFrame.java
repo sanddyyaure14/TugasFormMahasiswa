@@ -225,12 +225,8 @@ public class MainFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "File tidak ditemukan!");
         return;
     }
-
     mahasiswa.importFromCSV(file);
-  
-    loadData();
-
-
+      loadData();
     }//GEN-LAST:event_btnCsvActionPerformed
  
     private void loadData(){
