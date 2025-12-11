@@ -27,13 +27,57 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
-        modelMahasiswa = new DefaultTableModel(
-                
-        new String[]{"ID", "Nama", "NIM"}, 0);
+        modelMahasiswa = new DefaultTableModel(      
+        new String[]{"ID", "Nama", "NIM", "Jenis_Mahasiswa", "SKS", "Biaya Kuliah"}, 0);
         tblMahasiswa.setModel(modelMahasiswa);
         isEdit = false;
         loadData();
+        loadJenisMahasiswa();
+        txt_biayaKuliah.setEditable(false);
     }
+         
+        private void loadJenisMahasiswa() {
+        cmb_jenisMahasiswa.removeAllItems();
+        cmb_jenisMahasiswa.addItem("Pilih Jenis Mahasiswa");
+        cmb_jenisMahasiswa.addItem("Reguler");
+        cmb_jenisMahasiswa.addItem("Beasiswa");
+        cmb_jenisMahasiswa.addItem("Internasional");
+}
+        
+        private void hitungBiaya() {
+
+    
+    if (cmb_jenisMahasiswa.getSelectedIndex() == 0) {
+        txt_biayaKuliah.setText("");
+        return;
+    }
+
+    
+    if (txt_sks.getText().isEmpty()) {
+        txt_biayaKuliah.setText("");
+        return;
+    }
+
+    String jenis = cmb_jenisMahasiswa.getSelectedItem().toString();
+    int sks = Integer.parseInt(txt_sks.getText());
+
+    mahasiswa m;
+
+    switch (jenis) {
+        case "Reguler":
+            m = new MahasiswaReguler("", "", sks);
+            break;
+        case "Beasiswa":
+            m = new MahasiswaBeasiswa("", "", sks);
+            break;
+        default:
+            m = new MahasiswaInternasional("", "", sks);
+            break;
+    }
+
+    double biaya = m.hitungBiayaKuliah();
+    txt_biayaKuliah.setText(String.valueOf(biaya));
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,6 +88,7 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox<>();
         txtNama = new javax.swing.JTextField();
         txtNim = new javax.swing.JTextField();
         btnSubmit = new javax.swing.JButton();
@@ -54,6 +99,14 @@ public class MainFrame extends javax.swing.JFrame {
         btnHapus = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnCsv = new javax.swing.JButton();
+        cmb_jenisMahasiswa = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        txt_sks = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txt_biayaKuliah = new javax.swing.JTextField();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +160,30 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        cmb_jenisMahasiswa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmb_jenisMahasiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_jenisMahasiswaActionPerformed(evt);
+            }
+        });
+        cmb_jenisMahasiswa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmb_jenisMahasiswaKeyReleased(evt);
+            }
+        });
+
+        jLabel1.setText("Pilih Jenis Mahasiswa");
+
+        jLabel2.setText("Masukkan Jumlah SKS");
+
+        txt_sks.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_sksKeyReleased(evt);
+            }
+        });
+
+        jLabel3.setText("Biaya Kuliah");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,32 +199,53 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblNama, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(55, 55, 55))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(lblNim, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(71, 71, 71)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                            .addComponent(txtNim))))
-                .addContainerGap(116, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblNama, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(lblNim, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(16, 16, 16)))
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(cmb_jenisMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNama)
+                                .addComponent(txtNim)
+                                .addComponent(txt_sks)
+                                .addComponent(txt_biayaKuliah, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)))))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNama))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblNama)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblNim)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNim))
-                .addGap(80, 80, 80)
+                    .addComponent(cmb_jenisMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txt_sks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txt_biayaKuliah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHapus)
                     .addComponent(btnEdit)
@@ -155,7 +253,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(btnCsv))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         pack();
@@ -163,9 +261,36 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         // TODO add your handling code here:
+        if (cmb_jenisMahasiswa.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih jenis mahasiswa!");
+            return;
+        }
+
+        if (txt_sks.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Jumlah SKS harus diisi!");
+            return;
+        }
         String nama = txtNama.getText();
         String nim  = txtNim.getText();
-        mahasiswa m = new mahasiswa (nama,nim);
+        int sks = Integer.parseInt(txt_sks.getText());
+        String jenis = cmb_jenisMahasiswa.getSelectedItem().toString();
+        mahasiswa m;
+        switch (jenis) {
+    case "Reguler":
+        m = new MahasiswaReguler(nama, nim, sks);
+        break;
+
+    case "Beasiswa":
+        m = new MahasiswaBeasiswa(nama, nim, sks);
+        break;
+
+    default:
+        m = new MahasiswaInternasional(nama, nim, sks);
+        break;
+}
+        double biaya = m.hitungBiayaKuliah();
+        m.setBiaya_Kuliah(biaya);
+
         m.insert();       
         loadData();      
     }//GEN-LAST:event_btnSubmitActionPerformed
@@ -202,14 +327,23 @@ public class MainFrame extends javax.swing.JFrame {
     private void tblMahasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMahasiswaMouseClicked
         // TODO add your handling code here:
           int row = tblMahasiswa.getSelectedRow();
-            if (row == -1) {
-                return;
-            }
+    if (row == -1) return;
+
     DefaultTableModel m = (DefaultTableModel) tblMahasiswa.getModel();
-    String nama = m.getValueAt(row, 1).toString();  
-    String nim = m.getValueAt(row, 2).toString();   
+
+    // Ambil semua nilai dari tabel
+    String nama = m.getValueAt(row, 1).toString();
+    String nim = m.getValueAt(row, 2).toString();
+    String jenis = m.getValueAt(row, 3).toString();
+    String sks = m.getValueAt(row, 4).toString();
+    String biaya = m.getValueAt(row, 5).toString();
+
+    // Set ke form
     txtNama.setText(nama);
     txtNim.setText(nim);
+    cmb_jenisMahasiswa.setSelectedItem(jenis);  // pilih combobox sesuai jenis
+    txt_sks.setText(sks);
+    txt_biayaKuliah.setText(biaya);
     }//GEN-LAST:event_tblMahasiswaMouseClicked
 
     private void btnCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCsvActionPerformed
@@ -228,6 +362,21 @@ public class MainFrame extends javax.swing.JFrame {
     mahasiswa.importFromCSV(file);
       loadData();
     }//GEN-LAST:event_btnCsvActionPerformed
+
+    private void cmb_jenisMahasiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_jenisMahasiswaActionPerformed
+        // TODO add your handling code here:
+       hitungBiaya();
+    }//GEN-LAST:event_cmb_jenisMahasiswaActionPerformed
+
+    private void cmb_jenisMahasiswaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmb_jenisMahasiswaKeyReleased
+        // TODO add your handling code here:
+        hitungBiaya();
+    }//GEN-LAST:event_cmb_jenisMahasiswaKeyReleased
+
+    private void txt_sksKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_sksKeyReleased
+        // TODO add your handling code here:
+        hitungBiaya();
+    }//GEN-LAST:event_txt_sksKeyReleased
  
     private void loadData(){
         modelMahasiswa.setRowCount(0);
@@ -240,7 +389,10 @@ public class MainFrame extends javax.swing.JFrame {
                     modelMahasiswa.addRow(new Object[]{
                         rs.getInt("id"),         
                         rs.getString("nama"),     
-                        rs.getString("nim")       
+                        rs.getString("nim") ,  
+                        rs.getString("jenis_mahasiswa"), 
+                        rs.getInt("sks"),                
+                        rs.getDouble("biaya_kuliah") 
                     });
                 }
             } catch (Exception e) {
@@ -287,11 +439,18 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnSubmit;
+    private javax.swing.JComboBox<String> cmb_jenisMahasiswa;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNama;
     private javax.swing.JLabel lblNim;
     private javax.swing.JTable tblMahasiswa;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNim;
+    private javax.swing.JTextField txt_biayaKuliah;
+    private javax.swing.JTextField txt_sks;
     // End of variables declaration//GEN-END:variables
 }

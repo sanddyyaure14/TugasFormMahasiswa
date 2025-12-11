@@ -17,27 +17,95 @@ import javax.swing.JOptionPane;
  * @author HaRIS
  */
 public class mahasiswa {
-  protected String nim,nama;
-  protected int id;
+  private String nim,nama;
+  private int id;
+  private int sks;
+  private String jenis_mahasiswa;
+  private double biaya_kuliah;
   
-  mahasiswa (){
-      
+  
+  mahasiswa (){  
   }
   
-  mahasiswa (String nama, String nim){
-     // this.id =id;
+  mahasiswa (String nama, String nim, String jenis_mahasiswa, int sks){
       this.nim = nim;
       this.nama = nama;
+      this.jenis_mahasiswa = jenis_mahasiswa;
+      this.sks = sks;
   }
+  
+  public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNim() {
+        return nim;
+    }
+
+    public void setNim(String nim) {
+        this.nim = nim;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getJenis_mahasiswa() {
+        return jenis_mahasiswa;
+    }
+
+    public void setJenis_mahasiswa(String jenis_mahasiswa) {
+        this.jenis_mahasiswa = jenis_mahasiswa;
+    }
+
+    public int getSks() {
+        return sks;
+    }
+
+    public void setSks(int sks) {
+        this.sks = sks;
+    }
+
+    public double getBiaya_Kuliah() {
+        return biaya_kuliah;
+    }
+
+    public void setBiaya_Kuliah(double biaya_kuliah) {
+        this.biaya_kuliah = biaya_kuliah;
+    }
+  
+  public double hitungBiayaKuliah() {
+    return 0; 
+}
+
+  
+  
+  
+  
+  
+  
+  
+  
   
   public void insert (){
        try {
             Connection con = DbConnection.connect();
             PreparedStatement pst = con.prepareStatement(
-                "INSERT INTO mahasiswa (nama, nim) VALUES (?, ?)"
+                "INSERT INTO mahasiswa (nama, nim, jenis_mahasiswa, sks, biaya_kuliah) VALUES (?, ?, ?, ?, ?)"
             );
-            pst.setString(1, nama);
-            pst.setString(2, nim);
+            pst.setString(1, getNama());
+            pst.setString(2, getNim());
+            pst.setString(3, getJenis_mahasiswa());
+            pst.setInt(4, getSks());
+            pst.setDouble(5, getBiaya_Kuliah());
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil ditambahkan!");
             
@@ -68,21 +136,29 @@ public class mahasiswa {
       this.nama = nama;
       this.nim = nim;
   }
-  public void update (){
-      try {
-            Connection con = DbConnection.connect();
-            PreparedStatement pst = con.prepareStatement(
-                "UPDATE mahasiswa SET nama=?, nim=? WHERE id=?"
-            );
-            pst.setString(1, nama);
-            pst.setString(2, nim);
-            pst.setInt(3, id);
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Data berhasil diedit!");
-           // loadData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+ public void update() {
+    try {
+        Connection con = DbConnection.connect();
+        PreparedStatement pst = con.prepareStatement(
+            "UPDATE mahasiswa SET nama=?, nim=?, jenis_mahasiswa=?, sks=? WHERE id=?"
+        );
+        pst.setString(1, nama);                  
+        pst.setString(2, nim);                 
+        pst.setString(3, jenis_mahasiswa);     
+        pst.setInt(4, sks);                     
+        pst.setInt(5, id);                      
+        pst.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data berhasil diedit!");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+  
+  mahasiswa (String nama, String nim){
+     // this.id =id;
+      this.nim = nim;
+      this.nama = nama;
   }
   
   public static void importFromCSV(File file) {
