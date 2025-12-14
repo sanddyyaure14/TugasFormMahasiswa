@@ -34,7 +34,7 @@ public class mahasiswa {
       this.sks = sks;
   }
   
-  public int getId() {
+    public int getId() {
         return id;
     }
 
@@ -85,15 +85,6 @@ public class mahasiswa {
   public double hitungBiayaKuliah() {
     return 0; 
 }
-
-  
-  
-  
-  
-  
-  
-  
-  
   
   public void insert (){
        try {
@@ -114,8 +105,8 @@ public class mahasiswa {
         }
   }
   
-  public  mahasiswa (int id){
-      this.id = id;
+    public  mahasiswa (int id){
+        this.id = id;
   }
   
   public void delete (){
@@ -140,20 +131,22 @@ public class mahasiswa {
     try {
         Connection con = DbConnection.connect();
         PreparedStatement pst = con.prepareStatement(
-            "UPDATE mahasiswa SET nama=?, nim=?, jenis_mahasiswa=?, sks=? WHERE id=?"
+            "UPDATE mahasiswa SET nama=?, nim=?, jenis_mahasiswa=?, sks=?, biaya_kuliah=? WHERE id=?"
         );
-        pst.setString(1, nama);                  
-        pst.setString(2, nim);                 
-        pst.setString(3, jenis_mahasiswa);     
-        pst.setInt(4, sks);                     
-        pst.setInt(5, id);                      
+
+        pst.setString(1, getNama());
+        pst.setString(2, getNim());
+        pst.setString(3, getJenis_mahasiswa());
+        pst.setInt(4, getSks());
+        pst.setDouble(5, getBiaya_Kuliah());
+        pst.setInt(6, getId());
+
         pst.executeUpdate();
         JOptionPane.showMessageDialog(null, "Data berhasil diedit!");
     } catch (Exception e) {
         e.printStackTrace();
     }
 }
-
   
   mahasiswa (String nama, String nim){
      // this.id =id;
